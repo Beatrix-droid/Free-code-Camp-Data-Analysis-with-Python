@@ -17,41 +17,41 @@ def calculate_demographic_data(print_data=True):
 
 
     # What is the average age of men?
-    male_df = df["sex"] == "male"
-    age_column = male_df["age"]
-    average_age_men = age_column.mean()
+    male_df = df.loc[df["sex"] == "Male", "age"]
+    male_df.head()
+    average_age_men = male_df.mean()
+
 
     # What is the percentage of people who have a Bachelor's degree?
     
-    total = len(df["education"])
+    size = df.size
     bachelor_df = df["education"] == "Bachelors"
-    percentage_bachelors = (bachelor_df / total) * 100
-    
+    percentage_bachelors = (bachelor_df.size / size) * 100
+   
     # What percentage of people with advanced education (`Bachelors`, `Masters`, or `Doctorate`) make more than 50K?
 
     titles = ["Bachelors", "Masters", "Doctorate"] 
     masters_or_bachelors_df = df[df.education.isin(titles)]
-    total = len(masters_or_bachelors_df)
-
-    rich_df = masters_or_bachelors_df["salary"] > 50
+    total = masters_or_bachelors_df.size
+    rich_df = masters_or_bachelors_df["salary"] == ">=50K"
+    percentage_advanced_education = (rich_df.size/total)*100
     
-    percentage_advanced_education = (len(rich_df)/total)*100
-
     # What percentage of people without advanced education make more than 50K?
    
     no_advanced_ed_df = df[~df.education.isin(titles)]
-    total = len(no_advanced_ed_df)
-    more_than_50 = df[no_advanced_ed_df["salary"] > 50]
-    percentage_without_advanced_education = (len(more_than_50)/total)*100
-
+    total = no_advanced_ed_df.size
+    more_than_50 = no_advanced_ed_df["salary"] == ">=50K"              
+    percentage_without_advanced_education = ((more_than_50.size)/total)*100
+  
 
     # with and without `Bachelors`, `Masters`, or `Doctorate`
-    total = len(df)
+    total = df.size
+    higher_education = (masters_or_bachelors_df.size/total) *100
+    lower_education = (no_advanced_ed_df.size/total)*100
 
-    higher_education = (len(masters_or_bachelors_df)/total) *100
-    lower_education = (len(no_advanced_ed_df)/total)*100
 
-
+    ------------------------------#arrived here
+    
     # percentage with salary >50K
     
     higher_education_rich = (len(df["salary"] > 50)/len(df)) *100
@@ -101,7 +101,7 @@ def calculate_demographic_data(print_data=True):
     
     top_IN_occupation = None
 
-    # DO NOT MODIFY BELOW THIS LINEmax(country_dict, key=country_dict.get)
+    # DO NOT MODIFY BELOW THIS LINEmax(country_dict, key=country_dict.get) FREE CODE CAMP STARTER CODE BEGINS HERE:
 
     if print_data:
         print("Number of each race:\n", race_count) 
