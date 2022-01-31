@@ -2,6 +2,7 @@ import pandas as pd
 
 
 def calculate_demographic_data(print_data=True):
+  
     # Read data from file
     df=pd.read_csv("adult.data.csv")
     # How many of each race are represented in this dataset? This should be a Pandas series with race names as the index labels.
@@ -34,7 +35,7 @@ def calculate_demographic_data(print_data=True):
     # percentage with salary >50K
     higher_education_rich = round((len(educated_rich)/len(masters_or_bachelors_df)) * 100, 1)
    
-    uneducated_rich_df = df[df["salary"]==">50k"]
+    uneducated_rich_df = uneducated_df[uneducated_df["salary"]==">50K"]
 
     lower_education_rich =  round(len(uneducated_rich_df)/len(uneducated_df)*100, 1)
 
@@ -50,16 +51,15 @@ def calculate_demographic_data(print_data=True):
     # What percentage of the people who work the minimum number of hours per week have a salary of >50K?
      
     min_workers_df = df.loc[df["hours-per-week"]== min_work_hours, "salary"]
-    
-    rich_df = df[df[min_workers_df] == ">50K"]
+    rich_df = min_workers_df.loc[min_workers_df == ">50K"]
     
     num_min_workers =  len(min_workers_df)
 
     rich_percentage = (len(rich_df)/num_min_workers) * 100
 
     # What country has the highest percentage of people that earn >50K?
-    richest_df = df.loc[df["salary"] == ">50K", ["native-country", "fnlwgt"]]
-   
+    # What country has the highest percentage of people that earn >50K?
+    richest_df = df.loc[df["salary"] == ">50K", "native-country"]
     country_dict = {}
     for country in richest_df:
       if country in country_dict:
@@ -67,23 +67,13 @@ def calculate_demographic_data(print_data=True):
       else:
         country_dict[country] = 1
     
-    highest_earning_country = max(country_dict, key=country_dict.get)
+    highest_earning_country = None#max(country_dict, key=country_dict.get)
     highest_earning_country_percentage = None
 
     # Identify the most popular occupation for those who earn >50K in India.
-
-   # india_df = richest_df.loc[df["India", "occupation"]]
-
-    #occupation_dict = {}
-    #for occupation in india_df:
-     # occupation = india_df["occupation"]
-      #if occupation in occupation_dict:
-       #   occupation_dict[occupation] +=1
-      #else:
-       #   occupation_dict[occupation] = 1
     top_IN_occupation = None
-    #top_IN_occupation = max(occupation_dict,key=occupation_dict.get)
 
+    # DO NOT MODIFY BELOW THIS LINE
 
     if print_data:
         print("Number of each race:\n", race_count) 
