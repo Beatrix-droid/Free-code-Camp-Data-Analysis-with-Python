@@ -19,24 +19,27 @@ def calculate_demographic_data(print_data=True):
     average_age_men = age.round(1)
 
     # What is the percentage of people who have a Bachelor's degree?
-    size = df.size
-    bachelor_df = df["education"] == "Bachelors"
-    percentage_bachelors = (bachelor_df.size / size) * 100
+    bachelor_df = df[df["education"] == "Bachelors"]
+    percentage_bachelors = round(len(bachelor_df)/ len(df)*100,1)
+    
 
     # What percentage of people with advanced education (`Bachelors`, `Masters`, or `Doctorate`) make more than 50K?
     # What percentage of people without advanced education make more than 50K?
     titles = ["Bachelors", "Masters", "Doctorate"] 
     masters_or_bachelors_df = df[df.education.isin(titles)]
-    total = masters_or_bachelors_df.size
-    educated_rich = masters_or_bachelors_df["salary"] == ">50K"
+    uneducated_df = df[~df.education.isin(titles)]
+    educated_rich = masters_or_bachelors_df[ masters_or_bachelors_df["salary"] == ">50K"]
 
 
     # percentage with salary >50K
-    higher_education_rich = (educated_rich.size/size) * 100
-    lower_education_rich = lower_education_rich = 100 - higher_education_rich
+    higher_education_rich = round((len(educated_rich)/len(masters_or_bachelors_df)) * 100, 1)
+   
+    uneducated_rich_df = df[df["salary"]==">50k"]
+
+    lower_education_rich =  round(len(uneducated_rich_df)/len(uneducated_df)*100, 1)
 
     # with and without `Bachelors`, `Masters`, or `Doctorate`
-    higher_education = (educated_rich.size/size) * 100
+    higher_education = round((len(educated_rich)/len(df)) * 100, 1)
     lower_education = 100 - higher_education_rich
 
 
@@ -48,11 +51,11 @@ def calculate_demographic_data(print_data=True):
      
     min_workers_df = df.loc[df["hours-per-week"]== min_work_hours, "salary"]
     
-    rich_df = min_workers_df == ">50K"
+    rich_df = df[df[min_workers_df] == ">50K"]
     
-    num_min_workers =  min_workers_df.size
+    num_min_workers =  len(min_workers_df)
 
-    rich_percentage = (rich_df.size/num_min_workers) * 100
+    rich_percentage = (len(rich_df)/num_min_workers) * 100
 
     # What country has the highest percentage of people that earn >50K?
     richest_df = df.loc[df["salary"] == ">50K", ["native-country", "fnlwgt"]]
@@ -69,20 +72,18 @@ def calculate_demographic_data(print_data=True):
 
     # Identify the most popular occupation for those who earn >50K in India.
 
-india_df = richest_df.loc[df["India", "occupation"]]
+   # india_df = richest_df.loc[df["India", "occupation"]]
 
-occupation_dict = {}
-for occupation in india_df:
-    occupation = india_df["occupation"]
-    if occupation in occupation_dict:
-        occupation_dict[occupation] +=1
-    else:
-        occupation_dict[occupation] = 1
-    
-top_IN_occupation = max(occupation_dict, key=occupation_dict.get)
+    #occupation_dict = {}
+    #for occupation in india_df:
+     # occupation = india_df["occupation"]
+      #if occupation in occupation_dict:
+       #   occupation_dict[occupation] +=1
+      #else:
+       #   occupation_dict[occupation] = 1
+    top_IN_occupation = None
+    #top_IN_occupation = max(occupation_dict,key=occupation_dict.get)
 
-
-    # DO NOT MODIFY BELOW THIS LINE
 
     if print_data:
         print("Number of each race:\n", race_count) 
