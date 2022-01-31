@@ -3,16 +3,12 @@ import pandas as pd
 
 def calculate_demographic_data(print_data=True):
   
+   
     # Read data from file
     df=pd.read_csv("adult.data.csv")
     # How many of each race are represented in this dataset? This should be a Pandas series with race names as the index labels.
-    race_dict ={}
-    for race in df["race"]:
-      if race in race_dict:
-        race_dict[race] +=1
-      else:
-        race_dict[race] = 1
-    race_count = len(race_dict)
+    
+    race_count = df["race"].value_counts()
 
     # What is the average age of men?
     male_df = df.loc[df["sex"] == "Male", "age"]
@@ -67,28 +63,37 @@ def calculate_demographic_data(print_data=True):
       else:
         country_dict[country] = 1
     
-    highest_earning_country = None#max(country_dict, key=country_dict.get)
     
-    
-    #
-    
-    countries = {}
-
-    country_df = df["native-country"]
-    country_df.head()
-
-    for country in country_df:
-    countries[country] = df['native-country'].value_counts()[country]
-    print(countries)  
-
-    
-    highest_earning_country_percentage = None
-    
-    
-    
-    
+    richest_df = df.loc[df["salary"] == ">50K", "native-country"]
+    country_dict = {}
+    for country in richest_df:
+        if country in country_dict:
+            country_dict[country] +=1
+        else:
+          country_dict[country] = 1
     
 
+    countries= {}
+    country_df = df[["salary", "native-country"]]
+    for country in country_df["native-country"]:
+      if country in countries:
+          countries[country]+= 1
+      else:
+          countries[country] =1
+    #print(country_dict, countries)
+
+    percentages_richest = {}
+    for country in country_dict:
+      if country in countries:
+          percentages_richest[country] = country_dict[country]/countries[country]*100
+    #print(percentages_richest)
+    
+    highest_earning_country = max(percentages_richest, key=percentages_richest.get)
+
+    highest_earning_country_percentage = max(country_dict, key=country_dict.get)
+
+    
+    
     # Identify the most popular occupation for those who earn >50K in India.
     India_occupation = {}
     India_df = df.loc[df["native-country"] == "India", "occupation"]
@@ -99,6 +104,7 @@ def calculate_demographic_data(print_data=True):
           India_occupation[occupation]=1
         
     top_IN_occupation= max(India_occupation, key=India_occupation.get)
+  
   
 
     # DO NOT MODIFY BELOW THIS LINE
@@ -116,15 +122,15 @@ def calculate_demographic_data(print_data=True):
         print("Top occupations in India:", top_IN_occupation)
 
     return {
-        'race_count': race_count,
-        'average_age_men': average_age_men,
-        'percentage_bachelors': percentage_bachelors,
-        'higher_education_rich': higher_education_rich,
-        'lower_education_rich': lower_education_rich,
-        'min_work_hours': min_work_hours,
-        'rich_percentage': rich_percentage,
-        'highest_earning_country': highest_earning_country,
-        'highest_earning_country_percentage':
-        highest_earning_country_percentage,
-        'top_IN_occupation': top_IN_occupation
-    }
+          'race_count': race_count,
+          'average_age_men': average_age_men,
+          'percentage_bachelors': percentage_bachelors,
+          'higher_education_rich': higher_education_rich,
+          'lower_education_rich': lower_education_rich,
+          'min_work_hours': min_work_hours,
+          'rich_percentage': rich_percentage,
+          'highest_earning_country': highest_earning_country,
+          'highest_earning_country_percentage':
+          highest_earning_country_percentage,
+          'top_IN_occupation': top_IN_occupation
+        }
