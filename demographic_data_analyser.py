@@ -80,17 +80,19 @@ def calculate_demographic_data(print_data=True):
           countries[country]+= 1
       else:
           countries[country] =1
-    #print(country_dict, countries)
+   
 
     percentages_richest = {}
     for country in country_dict:
       if country in countries:
           percentages_richest[country] = country_dict[country]/countries[country]*100
-    #print(percentages_richest)
+   
     
     highest_earning_country = max(percentages_richest, key=percentages_richest.get)
 
-    highest_earning_country_percentage = max(country_dict, key=country_dict.get)
+    highest_percentage = max(percentages_richest.values())
+    highest_earning_country_percentage = round(highest_percentage, 1)
+
 
     
     
