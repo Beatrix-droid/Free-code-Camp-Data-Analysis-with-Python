@@ -54,13 +54,13 @@ def draw_bar_plot():
     axes.set(xlabel='Years', ylabel='Average Page Views')
     axes.set_xticklabels(axes.get_xticklabels(), rotation=90)
    
-   #fig makes it coloured
-    #fig.legend(labels=set(sorted_df["month"]), loc="upper left")
-
+  
+    #snippet from stack overflow
 
     handles, labels = plt.gca().get_legend_handles_labels()
     by_label = dict(zip(labels, handles))
     plt.legend(by_label.values(), by_label.keys(), loc='upper left')
+    
     # Save image and return fig (don't change this part)
     fig.savefig('bar_plot.png')
     return fig
