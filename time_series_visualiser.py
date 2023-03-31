@@ -47,11 +47,13 @@ def draw_bar_plot():
     sorted_df.drop("num", axis=1, inplace=True)
     
   # Draw bar plot
-    sorted_df.rename(columns={'year': 'Years', "count": "Average Page Views"}, inplace=True)
-    fig, axes = plt.subplots(1,2)
-    sns.barplot(ax=axes[0], data=sorted_df, hue=sorted_df["month"], x="Years", y="Average Page Views")
- 
-    plt.legend(labels=set(sorted_df["month"]))
+    fig, axes = plt.subplots(1,2,figsize=(20,12))
+    sns.barplot(ax=axes[0], data=sorted_df, hue=sorted_df["month"], x="year", y="count")
+    axes[0].set(xlabel='Years', ylabel='Average Page Views')
+    axes[0].set_xticklabels(axes[0].get_xticklabels(), rotation=90)
+    plt.legend(labels=set(sorted_df["month"]), loc="upper left")
+    #    axes[0].legend(labels=set(sorted_df["month"]), loc="upper left")
+
 
     # Save image and return fig (don't change this part)
     fig.savefig('bar_plot.png')
