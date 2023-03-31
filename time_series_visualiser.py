@@ -34,11 +34,12 @@ def draw_bar_plot():
    # Copy and modify data for monthly bar plot
     df_bar = df.copy()
     df_bar.reset_index(inplace=True)
-    #caprsint the date time objects and sorting teh months and columns
+    # print the date time objects and sorting the months and columns
     df_bar['year'] = [d.year for d in df_bar.date]
     df_bar['month'] = [d.strftime('%B') for d in df_bar.date]
     df_bar["num"]=[d.month for d in df_bar.date]
     
+   
     #grouping the dataframe
     new_df =df_bar.groupby(["year", "month","num"])["value"].mean().to_frame(name = 'count').reset_index()
 
@@ -48,14 +49,18 @@ def draw_bar_plot():
     
   # Draw bar plot
     fig, axes = plt.subplots(figsize=(12,12))
+    
     sns.barplot(ax=axes, data=sorted_df, hue=sorted_df["month"], x="year", y="count")
     axes.set(xlabel='Years', ylabel='Average Page Views')
     axes.set_xticklabels(axes.get_xticklabels(), rotation=90)
    
    #fig makes it coloured
-    plt.legend(labels=set(sorted_df["month"]), loc="upper left")
+    #fig.legend(labels=set(sorted_df["month"]), loc="upper left")
 
 
+    handles, labels = plt.gca().get_legend_handles_labels()
+    by_label = dict(zip(labels, handles))
+    plt.legend(by_label.values(), by_label.keys(), loc='upper left')
     # Save image and return fig (don't change this part)
     fig.savefig('bar_plot.png')
     return fig
