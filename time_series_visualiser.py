@@ -36,7 +36,7 @@ def draw_bar_plot():
     df_bar.reset_index(inplace=True)
     #caprsint the date time objects and sorting teh months and columns
     df_bar['year'] = [d.year for d in df_bar.date]
-    df_bar['month'] = [d.strftime('%b') for d in df_bar.date]
+    df_bar['month'] = [d.strftime('%B') for d in df_bar.date]
     df_bar["num"]=[d.month for d in df_bar.date]
     
     #grouping the dataframe
@@ -47,12 +47,14 @@ def draw_bar_plot():
     sorted_df.drop("num", axis=1, inplace=True)
     
   # Draw bar plot
-    fig=sns.barplot(data=sorted_df, x=sorted_df["year"], y=sorted_df["count"], hue=sorted_df["month"])
-    fig.set(xlabel='Average Page Views', ylabel="Years")
-    plt.legend()
+    sorted_df.rename(columns={'year': 'Years', "count": "Average Page Views"}, inplace=True)
+    fig, axes = plt.subplots(1,2)
+    sns.barplot(ax=axes[0], data=sorted_df, hue=sorted_df["month"], x="Years", y="Average Page Views")
+ 
+    plt.legend(labels=set(sorted_df["month"]))
 
     # Save image and return fig (don't change this part)
-    fig.figure.savefig('bar_plot.png')
+    fig.savefig('bar_plot.png')
     return fig
 
 def draw_box_plot():
